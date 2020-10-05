@@ -34,7 +34,7 @@ router.post("/register",
     try {
       const { name, email, password, mobile, isManager } = req.body;
       let user = await UsersDAO.findUserByMail(email);
-      console.log("User Details :->", user);
+      // console.log("User Details :->", user);
       if (user) {
         return res.status(400).json({
           msg: "User already exists"
