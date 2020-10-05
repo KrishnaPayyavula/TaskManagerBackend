@@ -1,4 +1,5 @@
 const jwt = require("jsonwebtoken");
+const { ObjectID } = require("mongodb");
 const UsersDAO = require("../dataAccessLayer/UsersDAO")
 module.exports = async function (req, res, next) {
 
@@ -14,18 +15,22 @@ module.exports = async function (req, res, next) {
   }
   const token = extractToken(req);
 
-  console.log("Token", token);
-  if (!token) return res.status(401).json({ message: "Auth Error" });
+  // console.log("Token", token);
+  if (!token) return res.status(401).json({ message: "Authentication Error" });
 
   try {
     const decoded = jwt.verify(token, "randomString");
     req.user = decoded.user;
-    const user = await UsersDAO.findUserById(decoded.user.id);
-    // if(req.route.path === "/add_quiz_question") {
-    if (!user) {
-      return res.status(500).send({ message: "Insufficient priviledges" });
+    let query = {
+      filter: { _id: ObjectID(decoded.user.id) },
+      options: { projection: { name: 1, role: 1, email: 1 } }
     }
-    // }
+    const user = await UsersDAO.findUserById(query);
+
+    if (!user) {
+      return res.status(500).send({ message: "Insufficient privileges" });
+    }
+
     next();
   } catch (e) {
     console.error(e);

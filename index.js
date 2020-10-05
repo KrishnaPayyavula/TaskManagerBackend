@@ -3,7 +3,8 @@ const cors = require('cors')
 const app = express()
 const bodyParser = require('body-parser');
 const user = require("./routes/users");
-const quiz = require("./routes/quiz");
+const tasks = require("./routes/tasks");
+
 if (process.env.NODE_ENV !== 'production') {
   require('dotenv').config();
 }
@@ -18,7 +19,10 @@ app.get('/', (req, res) => {
   res.send('Hello World!')
 })
 
-app.use("/user", user);
-app.use("/quiz", quiz);
+app.use("/api/user", user);
+app.use("/api/tasks", tasks)
 
-app.listen(port)
+app.listen(port, (error) => {
+  if (error) throw error;
+  console.log("Server is Running on PORT", port);
+})
