@@ -30,7 +30,7 @@ class TasksDAO {
      */
     static async getAllTasksByUserId(userid) {
         try {
-            return await _TASKSCOLLECTION.find({ created_by_id: ObjectID(userid) }).toArray();
+            return await _TASKSCOLLECTION.find({ assigned_to_id: ObjectID(userid) }).toArray();
         } catch (error) {
             return { error: error }
         }
@@ -91,7 +91,7 @@ class TasksDAO {
  */
     static async getTasksByStatus(query) {
         try {
-            return await TASKMANAGERDB.collection("users").find(query.filter).toArray();
+            return await _TASKSCOLLECTION.find(query.filter).toArray();
         } catch (error) {
             return { error: error }
         }

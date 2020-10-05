@@ -151,7 +151,7 @@ router.post("/get-tasks-by-status", auth,
 
             let query = {
                 filter: {
-                    created_by_id: ObjectID(userid),
+                    assigned_to_id: ObjectID(userid),
                     status: { $in: status }
                 }
             }
